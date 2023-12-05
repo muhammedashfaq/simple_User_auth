@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken')
 
 const authMiddleware = (req, res, next) => {
     try {
-
         const token = req.headers["authorization"]
-        if (!token || token.startsWith("Bearer ")) {
+        console.log(token);
+        if (!token || !token.startsWith("Bearer ")) {
             return res
                 .status(401)
                 .send({ message: "Token missing or invalid", success: false });
@@ -21,9 +21,6 @@ const authMiddleware = (req, res, next) => {
                 next();
             }
         })
-
-
-
     } catch (error) {
         console.error(error);
         return res
@@ -31,4 +28,4 @@ const authMiddleware = (req, res, next) => {
             .send({ message: "Internal server error", success: false });
     }
 }
-module.exports ={authMiddleware}
+module.exports = { authMiddleware }

@@ -8,12 +8,3 @@ export const ProtectedRoutesUser = (props) => {
     return <Navigate to={RouteObjects.Login} />;
   }
 };
-
-export const ProtectedRoutesAdmin = (props) => {
-  if (localStorage.getItem("admintoken")) {
-    return props.children;
-  } else {
-    return <Navigate to={RouteObjects.AdminLogin} />;
-  }
-};
-

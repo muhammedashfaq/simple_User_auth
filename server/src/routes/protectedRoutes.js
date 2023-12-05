@@ -1,10 +1,10 @@
-const express= require('express')
-const protectedRoutes= express.Router()
-const {userList} =require('../controller/userController')
+const express = require('express')
+const protectedRoutes = express.Router()
+const { userList, getauserData } = require('../controller/userController')
 const { authMiddleware } = require('../middleware/authMiddleware')
 
-protectedRoutes.post('/userDetails',authMiddleware, userList)
+protectedRoutes.use(authMiddleware)
+protectedRoutes.get('/userDetails',userList)
+protectedRoutes.post('/getauserData',getauserData)
 
-
-
-module.exports= protectedRoutes
+module.exports = protectedRoutes

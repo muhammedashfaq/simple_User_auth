@@ -2,6 +2,8 @@ const asynchHandler = require('express-async-handler')
 const User = require("../model/userModel")
 const bcypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+
+
 const signupUser = asynchHandler(async (req, res) => {
     const { name, email, password } = req.body
 
@@ -13,10 +15,7 @@ const signupUser = asynchHandler(async (req, res) => {
         const userData = new User({ name, email, password: hashedPassword })
         await userData.save()
         return res.status(200).send({ message: "User Created", success: true })
-
     }
-
-
 })
 
 const loginUser = asynchHandler(async (req, res) => {
@@ -34,13 +33,26 @@ const loginUser = asynchHandler(async (req, res) => {
             { id: user._id, name: user.name, role: "USER" },
             process.env.JWT_SECRET_USER,
             { expiresIn: "1d" }
-
         )
         res.status(200).send({ message: "logged", success: true, data: token })
-
     }
-
 })
+
+
+const getauserData = asynchHandler(async (req, res) => {
+    const id = req.userId;
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+        return res
+            .status(400)
+            .send({ message: "user does not exisr", success: false });
+    } else {
+        const userDetails = await User.findOne({ _id: id }, { password: 0 })
+        res.status(200).send({ message: "dataFetched", success: true, userdetails: userDetails })
+    }
+})
+
+
 
 const userList = asynchHandler(async (req, res) => {
     const id = req.userId;
@@ -61,5 +73,6 @@ const userList = asynchHandler(async (req, res) => {
 module.exports = {
     loginUser,
     signupUser,
-    userList
+    userList,
+    getauserData
 }
